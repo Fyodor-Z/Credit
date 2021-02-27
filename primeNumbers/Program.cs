@@ -4,25 +4,36 @@ namespace primeNumbers
 {
     class Program
     {
+
+        public struct cursorPos  //cursor position of element on the screen
+        {
+            int x;
+            int y;
+        }
+
+        public struct numberData  //number with its potision
+        {
+            int value;
+            cursorPos Position;
+        }
+
         static void Main(string[] args)
 
 
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Welcome to The Sieve of Eratosthenes v 0.1 - animated Prime Numbers Search Engine");
-            Console.ResetColor();
-            Console.WriteLine("-------------------------------------------------------------------------------- ");
+            programTitle();
+
 
             bool result = false;
-
-            uint N = 0;
+            uint N = 0; //limit of numbers to work with
+            
 
             do  //get N
             {
                 Console.WriteLine("Please enter N - the limit of the prime numbers search:");
                 Console.Write("N=");
                 string input = Console.ReadLine();
-
+                
                 result = uint.TryParse(input, out N);
                 result = result && N != 0;
 
@@ -35,38 +46,63 @@ namespace primeNumbers
             }
             while (result == false);
 
-            for (int i = 1; i <= N; i++)
+            numberData[] numberS = new numberData[N];  //numbers and their coordinates on the screen
+
+            tableTitle();
+
+            for (int i = 1; i <= N; i++)  //
             {
 
                 Console.Write($"{i,4}|");
 
                 if (i % 10 == 0) //new line every 10 numbers
                 {
-
-                    drawLine(5);
+                    Console.WriteLine("|");
+                    drawLine('-', 50);
                 }
             }
 
         }
-        static void drawLine(int lngth)
+        
+
+        static void programTitle()   //startup text
         {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Welcome to The Sieve of Eratosthenes v 0.1 - animated Prime Numbers Search Engine");
+            drawLine('=', 80);
+            Console.ResetColor();
+        }
+
+        static void tableTitle() //markup of the screen
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("---------------Unfiltered numbers----------------|");
+            Console.ResetColor();
+            drawLine('=', 48);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.CursorTop -= 2;
+            Console.CursorLeft = 50;
+            Console.WriteLine("|---------------Prime numbers----------------");
+            Console.ResetColor();
+            Console.CursorLeft = 51;
+            drawLine('=', 44);
+
+
+        }
+
+        static void drawLine(char symbol, int lngth) //insert line of specifed symbols and specified length
+        {
+            
             for (int i = 0; i <= lngth; i++)
             {
-
-                Console.Write('-');
-                if (Console.CursorLeft < Console.BufferWidth)
-                {
-                    Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop);
-                }
-                else
+                Console.Write(symbol);
+                if (Console.CursorLeft == (Console.BufferWidth - 1))
                 {
                     break;
                 }
-                Console.WriteLine();
-
             }
-
-
+            Console.WriteLine();
         }
     }
 }
